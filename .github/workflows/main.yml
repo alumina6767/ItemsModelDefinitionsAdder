@@ -1,0 +1,23 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4.2.2
+    - uses: actions/setup-python@v5.3.0
+      with:
+        python-version: 3.12
+
+    - run: pip install -r pyinstaller
+    - run: pyinstaller items_model_difinition_adder.py --onefile
+    # Optionally verify that it works (provided that it does not need user interaction)
+    - uses: actions/upload-artifact@v4.6.0
+      with:
+        path: dist/*
