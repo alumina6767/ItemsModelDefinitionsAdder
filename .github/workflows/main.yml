@@ -12,6 +12,9 @@ jobs:
     steps:
     - name: Download all workflow run artifacts
       uses: actions/download-artifact@v4
+      with:
+          pattern: my-artifacts-*
+          merge-multiple: true      
     - uses: actions/checkout@v4.2.2
     - uses: actions/setup-python@v5.3.0
       with:
@@ -22,4 +25,5 @@ jobs:
     # Optionally verify that it works (provided that it does not need user interaction)
     - uses: actions/upload-artifact@v4.6.0
       with:
+        name: my-artifacts-${{ matrix.os }}
         path: dist/*
