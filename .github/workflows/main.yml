@@ -15,7 +15,7 @@ jobs:
       with:
         python-version: 3.12
 
-    - run: pip install -r pyinstaller
+    - run: pip install pyinstaller
     - run: pyinstaller items_model_difinition_adder.py --onefile
     # Optionally verify that it works (provided that it does not need user interaction)
     - uses: actions/upload-artifact@v4.6.0
