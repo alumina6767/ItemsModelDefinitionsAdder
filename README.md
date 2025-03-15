@@ -5,6 +5,8 @@
 
 各名前空間について、assets/namespace/models/item内のモデルを探索しassets/namespace/items内にアイテムモデル定義ファイルを作成する。
 
+Animeted Java についてはそもそも assets/animated_java/models/item ではなく assets/animated_java/models/blueprint にモデルを書き出すので探索の対象外になり、影響はない。
+
 ## ダウンロード
 [ダウンロード](https://github.com/alumina6767/ItemsModelDefinitionsAdder/releases/latest)
 
