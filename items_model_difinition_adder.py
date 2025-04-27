@@ -12,7 +12,7 @@ import json
 ITEM_TEMP = r'{"model": {"type": "minecraft:model","model": "$model_path"}}'
 
 # 参照用モデルに使うアイテム
-REFERENCE_ITEM_ID = "command_block_minecart"
+REF_ITEM_ID = "command_block_minecart"
 
 
 def check_dir(path):
@@ -23,7 +23,7 @@ def check_dir(path):
         os.makedirs(path)
 
 
-def get_reference_item(path):
+def get_ref_item(path):
     """
     参照用アイテムの定義ファイルを読み込む。
     存在しなければ作成する。
@@ -57,7 +57,7 @@ def get_reference_item(path):
         return json.load(f)
 
 
-def add_reference_item(item, ns, resource_path):
+def add_ref_item(item, ns, resource_path):
     """
     参照用アイテムの定義にモデルを追加する。
     
@@ -91,13 +91,13 @@ if __name__ == "__main__":
         exit()
 
     # 参照用のアイテムモデルを作成するか確認
-    is_make_reference_item = False
+    is_make_ref_item = False
     print("Axiomなど用に参照用のアイテム定義ファイルを作成しますか?\ny: 作成する\nn: 作成しない")
     if input() == "y":
-        is_make_reference_item = True
-        reference_item_path = os.path.join(
-            "assets", "minecraft", "items", f"{REFERENCE_ITEM_ID}.json")
-        reference_item = get_reference_item(reference_item_path)
+        is_make_ref_item = True
+        ref_item_path = os.path.join(
+            "assets", "minecraft", "items", f"{REF_ITEM_ID}.json")
+        ref_item = get_ref_item(ref_item_path)
 
     # 名前空間の取得
     namespaces = []
@@ -149,8 +149,8 @@ if __name__ == "__main__":
                 no_of_export_items += 1
 
             # 参照用モデルを作成
-            if is_make_reference_item:
-                add_reference_item(reference_item, ns, resource_path)
+            if is_make_ref_item:
+                add_ref_item(ref_item, ns, resource_path)
 
         # 結果通知
         if no_of_export_items != 0:
@@ -160,9 +160,9 @@ if __name__ == "__main__":
             print(f"{len(models)} 個のモデルファイルが見つかりましたが、既にアイテム定義ファイルは存在したため作成しませんでした。")
 
     # 参照用モデルを更新
-    if is_make_reference_item:
-        with open(reference_item_path, "w", encoding="utf-8") as f:
-            json.dump(reference_item, f, indent=4)
+    if is_make_ref_item:
+        with open(ref_item_path, "w", encoding="utf-8") as f:
+            json.dump(ref_item, f, indent=4)
 
     # 終了メッセージ
     print("\n正常終了しました。\nエンターキーで終了します。")
