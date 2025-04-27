@@ -18,7 +18,7 @@ REF_ITEM_ID = "command_block_minecart"
 def check_dir(path):
     """ ディレクトリの存在を確認し、なければ作成する。 """
 
-    if os.path.isdir(path) == False:
+    if not os.path.isdir(path):
         print(f"{path} フォルダを作成します。")
         os.makedirs(path)
 
@@ -29,14 +29,14 @@ def get_ref_item(path):
     存在しなければ作成する。
 
     :param path: 参照用アイテムの定義ファイルのパス
-    :return: json形式のアイテム定義
+    :return: JSONのアイテム定義
     """
 
     # フォルダの作成
     check_dir(os.path.dirname(path))
 
     # 定義ファイルの作成
-    if os.path.isfile(path) == False:
+    if not os.path.isfile(path):
         with open(path, "w", encoding="utf-8") as f:
             j = {
                 "model": {
@@ -57,35 +57,35 @@ def get_ref_item(path):
         return json.load(f)
 
 
-def add_ref_item(item, ns, resource_path):
+def add_ref_item(item, ns, res_path):
     """
     参照用アイテムの定義にモデルを追加する。
-    
-    :param item: json形式のアイテム定義
+
+    :param item: JSONのアイテム定義
     :param ns: 名前空間
-    :param resource_path: 追加するモデルのリソースパス
-    :return: json形式のアイテム定義
+    :param res_path: 追加するモデルのリソースパス
+    :return: JSONのアイテム定義
     """
-    
-    items_list = [ref["when"] for ref in item["model"]["cases"]]
-    if ns + ":" + resource_path not in items_list:
+
+    case = [ref["when"] for ref in item["model"]["cases"]]
+    if ns + ":" + res_path not in case:
         item["model"]["cases"].append(
             {
-                "when": ns + ":" + resource_path,
+                "when": f"{ns}:{res_path}",
                 "model":
                     {
                         "type": "minecraft:model",
-                        "model": ns + ":item/" + resource_path
-                    }
+                        "model": f"{ns}:item/{res_path}"
+                }
             }
         )
-        print(f"{resource_path} の参照用モデルを追加しました。")
+        print(f"{res_path} の参照用モデルを追加しました。")
     return item
 
 
 if __name__ == "__main__":
     # 実行ディレクトリの確認
-    if os.path.isdir("assets") == False:
+    if not os.path.isdir("assets"):
         print("assetsフォルダが見つかりません。assetsと同じ階層で実行してください。\nエンターキーで終了します。")
         input()
         exit()
@@ -126,31 +126,31 @@ if __name__ == "__main__":
         # モデル毎に定義ファイルを探索
         no_of_export_items = 0
         for model in models:
-            resource_path = model.\
+            res_path = model.\
                 split(os.path.join("models", "item", ""))[1].\
                 replace(".json", "").\
                 replace('\\', '/')
 
             # 定義ファイルのパス
-            item_path = os.path.join(items_dir, resource_path + ".json")
+            item_path = os.path.join(items_dir, res_path + ".json")
 
             # 定義ファイルがない場合作成
-            if os.path.isfile(item_path) == False:
+            if not os.path.isfile(item_path):
 
                 # 書き込み先のディレクトリの確認
                 check_dir(os.path.dirname(item_path))
 
                 # ファイルの作成
                 with open(item_path, "w", encoding="utf-8") as f:
-                    f.write(ITEM_TEMP.replace("$model_path",
-                            f"{ns}:item/{resource_path}"))
+                    f.write(ITEM_TEMP.replace(
+                        "$model_path", f"{ns}:item/{res_path}"))
 
                 print(f"{item_path} を作成しました。")
                 no_of_export_items += 1
 
             # 参照用モデルを作成
             if is_make_ref_item:
-                add_ref_item(ref_item, ns, resource_path)
+                add_ref_item(ref_item, ns, res_path)
 
         # 結果通知
         if no_of_export_items != 0:
