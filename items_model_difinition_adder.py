@@ -42,15 +42,15 @@ def get_ref_item(path):
                 "model": {
                     "type": "minecraft:select",
                     "property": "minecraft:custom_model_data",
-                    "cases": [],
                     "fallback": {
                             "type": "minecraft:model",
                             "model": "minecraft:item/command_block_minecart"
-                    }
+                    },
+                    "cases": []
                 }
             }
 
-            json.dump(j, f, indent=4)
+            json.dump(j, f, indent=2)
             print(f"新しく参照用のアイテム定義ファイル {path} を作成します。")
 
     with open(path, "r", encoding="utf-8") as f:
@@ -142,8 +142,8 @@ if __name__ == "__main__":
 
                 # ファイルの作成
                 with open(item_path, "w", encoding="utf-8") as f:
-                    f.write(ITEM_TEMP.replace(
-                        "$model_path", f"{ns}:item/{res_path}"))
+                    json.dump(json.loads(ITEM_TEMP.replace(
+                        "$model_path", f"{ns}:item/{res_path}")),f, indent=2)
 
                 print(f"{item_path} を作成しました。")
                 no_of_export_items += 1
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     # 参照用モデルを更新
     if is_make_ref_item:
         with open(ref_item_path, "w", encoding="utf-8") as f:
-            json.dump(ref_item, f, indent=4)
+            json.dump(ref_item, f, indent=2)
 
     # 終了メッセージ
     print("\n正常終了しました。\nエンターキーで終了します。")
