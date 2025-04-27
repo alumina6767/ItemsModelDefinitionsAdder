@@ -16,12 +16,21 @@ REFERENCE_ITEM_ID = "command_block_minecart"
 
 
 def check_dir(path):
+    """ ディレクトリの存在を確認し、なければ作成する。 """
+
     if os.path.isdir(path) == False:
         print(f"{path} フォルダを作成します。")
         os.makedirs(path)
 
 
 def get_reference_item(path):
+    """
+    参照用アイテムの定義ファイルを読み込む。
+    存在しなければ作成する。
+
+    :param path: 参照用アイテムの定義ファイルのパス
+    :return: json形式のアイテム定義
+    """
 
     # フォルダの作成
     check_dir(os.path.dirname(path))
@@ -49,6 +58,15 @@ def get_reference_item(path):
 
 
 def add_reference_item(item, ns, resource_path):
+    """
+    参照用アイテムの定義にモデルを追加する。
+    
+    :param item: json形式のアイテム定義
+    :param ns: 名前空間
+    :param resource_path: 追加するモデルのリソースパス
+    :return: json形式のアイテム定義
+    """
+    
     items_list = [ref["when"] for ref in item["model"]["cases"]]
     if ns + ":" + resource_path not in items_list:
         item["model"]["cases"].append(
